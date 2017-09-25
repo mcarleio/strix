@@ -1,0 +1,38 @@
+Strix
+Copyright 2017 Marcel Carlé
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+This project includes:
+  AntLR Parser Generator under BSD License
+  Apache Log4j API under Apache License, Version 2.0
+  Apache Log4j Core under Apache License, Version 2.0
+  Apache Log4j SLF4J Binding under Apache License, Version 2.0
+  AspectJ runtime under Eclipse Public License - v 1.0
+  ClassMate under The Apache Software License, Version 2.0
+  Core Hibernate O/RM functionality under GNU Lesser General Public License
+  dom4j under BSD License
+  H2 Database Engine under MPL 2.0 or EPL 1.0
+  Hamcrest Core under New BSD License
+  Hibernate Commons Annotations under GNU Lesser General Public License
+  Java Annotation Indexer under Apache License, Version 2.0
+  Java Persistence API, Version 2.1 under Eclipse Public License (EPL), Version 1.0 or Eclipse Distribution License (EDL), Version 1.0
+  Java Transaction API under Common Development and Distribution License or GNU General Public License, Version 2 with the Classpath Exception
+  Javassist under MPL 1.1 or LGPL 2.1 or Apache License 2.0
+  JBoss Logging 3 under Apache License, version 2.0
+  JUnit under Eclipse Public License 1.0
+  SLF4J API Module under MIT License
+  strix under The Apache License, Version 2.0
+  ThrowingFunction under The Apache License, Version 2.0
+  XML Commons External Components XML APIs under The Apache Software License, Version 2.0
+
