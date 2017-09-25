@@ -41,7 +41,7 @@ You can find a simple example project under [example](./example/). In short term
     </plugin>
     ```
 
-3. Start strix before you need call any transactional methods 
+3. Start strix before you call any transactional methods 
     ```java
     import io.mcarle.strix.Strix;
     import org.glassfish.jersey.servlet.ServletContainer;
@@ -62,14 +62,14 @@ You can find a simple example project under [example](./example/). In short term
     }
     ```
 
-4. Annotate your classes or methods, which should be transactional with strix's [`@Transactional`](./src/main/java/io/mcarle/strix/annotation/Transactional.java) like
+4. Annotate your classes or methods, which should be transactional with strix's [`@Transactional`](./src/main/java/io/mcarle/strix/annotation/Transactional.java)-Annotation like
     ```java
     import io.mcarle.strix.annotation.Transactional;
     import static io.mcarle.strix.Strix.em;
  
     @Transactional
     public class ExampleManager {
-       public long find(Class entityClass, Long id) {
+       public <T> T find(Class<T> entityClass, Long id) {
             return em().find(entityClass, id);
        }
     }
