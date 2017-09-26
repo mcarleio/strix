@@ -9,7 +9,7 @@ You can find a simple example project under [example](./example/). In short term
     <dependency>
         <groupId>io.mcarle</groupId>
         <artifactId>strix</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </dependency>
     ```
     
