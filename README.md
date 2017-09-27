@@ -1,5 +1,9 @@
-# strix
+![STRIX](./logo.png)
+
 A lightweight and simple transaction library for non JEE projects.
+
+[![Maven Central][maven-image]][maven-url] 
+[![License][license-image]](LICENSE)
 
 ## Simple Usage
 
@@ -92,3 +96,9 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+
+[maven-image]: https://img.shields.io/maven-central/v/io.mcarle/strix.svg
+[maven-url]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.mcarle%22%20a%3A%22strix%22
+[license-image]: https://img.shields.io/github/license/mcarleio/strix.svg
+[license-url]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.mcarle%22%20a%3A%22strix%22
