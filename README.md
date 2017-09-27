@@ -4,6 +4,8 @@ A lightweight and simple transaction library for non JEE projects.
 
 [![Maven Central][maven-image]][maven-url] 
 [![License][license-image]](LICENSE)
+[![Build status][travis-image]][travis-url]
+[![Build status][codecov-image]][codecov-url]
 
 ## Simple Usage
 
@@ -102,3 +104,7 @@ limitations under the License.
 [maven-url]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.mcarle%22%20a%3A%22strix%22
 [license-image]: https://img.shields.io/github/license/mcarleio/strix.svg
 [license-url]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.mcarle%22%20a%3A%22strix%22
+[travis-image]: https://img.shields.io/travis/mcarleio/strix.svg
+[travis-url]: https://travis-ci.org/mcarleio/strix
+[codecov-image]: https://img.shields.io/codecov/c/github/mcarleio/strix.svg
+[codecov-url]: https://codecov.io/gh/mcarleio/strix
