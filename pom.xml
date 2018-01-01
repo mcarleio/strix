@@ -5,7 +5,7 @@
 
     <groupId>io.mcarle</groupId>
     <artifactId>strix</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>strix</name>
@@ -267,7 +267,7 @@
         <url>https://github.com/mcarleio/strix</url>
         <connection>scm:git:git@github.com:mcarleio/strix.git</connection>
         <developerConnection>scm:git:git@github.com:mcarleio/strix.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>strix-1.0.1</tag>
   </scm>
 
     <distributionManagement>
