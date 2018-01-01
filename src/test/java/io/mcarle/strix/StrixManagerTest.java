@@ -14,7 +14,8 @@ import static org.junit.Assert.*;
 
 public class StrixManagerTest {
 
-    private final TestManager testManager = new TestManager();
+    private final TransactionalAnnotatedManager transactionalAnnotatedManager = new TransactionalAnnotatedManager();
+    private final MethodsAnnotatedWithTransactionalManager methodsAnnotatedWithTransactionalManager = new MethodsAnnotatedWithTransactionalManager();
 
     @Before
     public void startupPersistence() {
@@ -29,135 +30,135 @@ public class StrixManagerTest {
     @Test
     public void checkPointcutIsPersistenceStartedTest() {
         StrixManager.STARTED = false;
-        assertNull(testManager.getEntityManagerPUBLIC());
+        assertNull(transactionalAnnotatedManager.getEntityManagerPUBLIC());
 
         StrixManager.STARTED = true;
-        assertNotNull(testManager.getEntityManagerPUBLIC());
+        assertNotNull(transactionalAnnotatedManager.getEntityManagerPUBLIC());
 
         StrixManager.STARTED = false;
-        assertNull(testManager.getEntityManagerPUBLIC());
+        assertNull(transactionalAnnotatedManager.getEntityManagerPUBLIC());
     }
 
     @Test
     public void checkPointcutPublicMethodTest() {
-        assertNotNull(testManager.getEntityManagerPUBLIC());
-        assertNull(testManager.getEntityManagerPROTECTED());
-        assertNull(testManager.getEntityManagerDEFAULT());
+        assertNotNull(transactionalAnnotatedManager.getEntityManagerPUBLIC());
+        assertNull(transactionalAnnotatedManager.getEntityManagerPROTECTED());
+        assertNull(transactionalAnnotatedManager.getEntityManagerDEFAULT());
     }
 
     @Test
     public void checkPointcutNotNoTransactionAnnotatedTest() {
-        assertNotNull(testManager.getEntityManagerPUBLIC());
-        assertNull(testManager.getEntityManagerNO_TRANSACTION());
+        assertNotNull(transactionalAnnotatedManager.getEntityManagerPUBLIC());
+        assertNull(transactionalAnnotatedManager.getEntityManagerNO_TRANSACTION());
     }
 
     @Test
     public void checkClosedAfterExecutionTest() {
-        assertFalse(testManager.getEntityManagerPUBLIC().isOpen());
+        assertFalse(transactionalAnnotatedManager.getEntityManagerPUBLIC().isOpen());
     }
 
     @Test
     public void commitTest() {
-        long countBefore = testManager.count_STRIX_PU();
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
 
-        assertNotNull(testManager.save_STRIX_PU(new TestEntity()).getId());
-        assertEquals(countBefore + 1, testManager.count_STRIX_PU());
+        assertNotNull(transactionalAnnotatedManager.save_STRIX_PU(new TestEntity()).getId());
+        assertEquals(countBefore + 1, transactionalAnnotatedManager.count_STRIX_PU());
     }
 
     @Test
     public void commitMultipleTest() {
-        long countBefore = testManager.count_STRIX_PU();
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
 
-        testManager.multisave_STRIX_PU();
+        transactionalAnnotatedManager.multisave_STRIX_PU();
 
-        assertEquals(countBefore + 3, testManager.count_STRIX_PU());
+        assertEquals(countBefore + 3, transactionalAnnotatedManager.count_STRIX_PU());
     }
 
     @Test(expected = RuntimeException.class)
     public void rollbackTest() {
-        long countBefore = testManager.count_STRIX_PU();
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
         try {
-            testManager.saveMultipleTimesThenException_STRIX_PU();
+            transactionalAnnotatedManager.saveMultipleTimesThenException_STRIX_PU();
         } finally {
-            assertEquals(countBefore, testManager.count_STRIX_PU());
+            assertEquals(countBefore, transactionalAnnotatedManager.count_STRIX_PU());
         }
     }
 
     @Test(expected = Throwable.class)
     public void rollbackWithThrowableTest() throws Throwable {
-        long countBefore = testManager.count_STRIX_PU();
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
         try {
-            testManager.saveMultipleTimesThenThrowableInNewTransaction_STRIX_PU();
+            transactionalAnnotatedManager.saveMultipleTimesThenThrowableInNewTransaction_STRIX_PU();
         } finally {
-            assertEquals(countBefore, testManager.count_STRIX_PU());
+            assertEquals(countBefore, transactionalAnnotatedManager.count_STRIX_PU());
         }
     }
 
     @Test(expected = RuntimeException.class)
     public void throwInNewTransaction() throws Throwable {
-        testManager.callAnotherMethodInNewTransaction();
+        transactionalAnnotatedManager.callAnotherMethodInNewTransaction();
     }
 
     @Test
     public void readOnlyTest() {
-        long countBefore = testManager.count_STRIX_PU();
-        testManager.saveMultipleTimesReadOnly_STRIX_PU();
-        assertEquals(countBefore, testManager.count_STRIX_PU());
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
+        transactionalAnnotatedManager.saveMultipleTimesReadOnly_STRIX_PU();
+        assertEquals(countBefore, transactionalAnnotatedManager.count_STRIX_PU());
     }
 
     @Test(expected = RuntimeException.class)
     public void noRollbackForTest() {
-        long countBefore = testManager.count_STRIX_PU();
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
         try {
-            testManager.saveMultipleTimesThenExceptionButNoRollback_STRIX_PU();
+            transactionalAnnotatedManager.saveMultipleTimesThenExceptionButNoRollback_STRIX_PU();
         } finally {
-            assertEquals(countBefore + 3, testManager.count_STRIX_PU());
+            assertEquals(countBefore + 3, transactionalAnnotatedManager.count_STRIX_PU());
         }
     }
 
     @Test
     public void requiresNewTest() {
-        long countBefore = testManager.count_STRIX_PU();
-        long countInNewTransaction = testManager.saveAndMultisaveAndCountInNewTransaction_STRIX_PU();
-        long countAfter = testManager.count_STRIX_PU();
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
+        long countInNewTransaction = transactionalAnnotatedManager.saveAndMultisaveAndCountInNewTransaction_STRIX_PU();
+        long countAfter = transactionalAnnotatedManager.count_STRIX_PU();
         assertEquals(countBefore + 3, countInNewTransaction);
         assertEquals(countBefore + 4, countAfter);
     }
 
     @Test(expected = IllegalStateException.class)
     public void timeoutTest() {
-        long countBefore = testManager.count_STRIX_PU();
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
         try {
-            testManager.executeLongRunning_STRIX_PU(100);
+            transactionalAnnotatedManager.executeLongRunning_STRIX_PU(100);
         } finally {
-            assertEquals(countBefore, testManager.count_STRIX_PU());
+            assertEquals(countBefore, transactionalAnnotatedManager.count_STRIX_PU());
         }
     }
 
     @Test
     public void persistenceUnitTest() {
-        long countBefore = testManager.count_STRIX_PU();
-        long countOtherPUBefore = testManager.count_STRIX_SECOND_PU();
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
+        long countOtherPUBefore = transactionalAnnotatedManager.count_STRIX_SECOND_PU();
         try {
-            testManager.multisave_STRIX_SECOND_PU();
+            transactionalAnnotatedManager.multisave_STRIX_SECOND_PU();
         } finally {
-            assertEquals(countBefore, testManager.count_STRIX_PU());
-            assertEquals(countOtherPUBefore + 3, testManager.count_STRIX_SECOND_PU());
+            assertEquals(countBefore, transactionalAnnotatedManager.count_STRIX_PU());
+            assertEquals(countOtherPUBefore + 3, transactionalAnnotatedManager.count_STRIX_SECOND_PU());
         }
     }
 
     @Test
     public void requiresNewWithExceptionTest() {
-        long countBefore = testManager.count_STRIX_PU();
-        testManager.saveThenThrowInOtherTransactionThenSave_STRIX_PU();
-        assertEquals(countBefore + 6, testManager.count_STRIX_PU());
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
+        transactionalAnnotatedManager.saveThenThrowInOtherTransactionThenSave_STRIX_PU();
+        assertEquals(countBefore + 6, transactionalAnnotatedManager.count_STRIX_PU());
     }
 
     @Test
     public void timeoutNotNeededTest() {
-        long countBefore = testManager.count_STRIX_PU();
-        testManager.executeLongRunning_STRIX_PU(1);
-        assertEquals(countBefore + 6, testManager.count_STRIX_PU());
+        long countBefore = transactionalAnnotatedManager.count_STRIX_PU();
+        transactionalAnnotatedManager.executeLongRunning_STRIX_PU(1);
+        assertEquals(countBefore + 6, transactionalAnnotatedManager.count_STRIX_PU());
     }
 
     @Test(expected = PersistenceException.class)
@@ -166,7 +167,7 @@ public class StrixManagerTest {
 
         // Should result in PersistenceException, as strix is initialized with no default persistence unit and there
         // is existing more than one in the persistence.xml
-        testManager.count_DEFAULT_PU();
+        transactionalAnnotatedManager.count_DEFAULT_PU();
     }
 
     @Test
@@ -183,23 +184,23 @@ public class StrixManagerTest {
         Strix.startup(persistenceProperties, "strix-pu");
 
         // Saves some entries in strix-pu
-        testManager.multisave_STRIX_PU();
+        transactionalAnnotatedManager.multisave_STRIX_PU();
 
-        assertEquals(testManager.count_STRIX_PU(), testManager.count_DEFAULT_PU()); // strix-pu == strix-pu
-        assertNotEquals(testManager.count_STRIX_SECOND_PU(), testManager.count_DEFAULT_PU()); // strix-pu != strix-second-pu
+        assertEquals(transactionalAnnotatedManager.count_STRIX_PU(), transactionalAnnotatedManager.count_DEFAULT_PU()); // strix-pu == strix-pu
+        assertNotEquals(transactionalAnnotatedManager.count_STRIX_SECOND_PU(), transactionalAnnotatedManager.count_DEFAULT_PU()); // strix-pu != strix-second-pu
 
         // (Re-)Start strix with different default-pu
         Strix.startup(persistenceProperties, "strix-second-pu");
 
-        assertNotEquals(testManager.count_STRIX_PU(), testManager.count_DEFAULT_PU()); // strix-pu != strix-second-pu
-        assertEquals(testManager.count_STRIX_SECOND_PU(), testManager.count_DEFAULT_PU()); // strix-second-pu == strix-second-pu
+        assertNotEquals(transactionalAnnotatedManager.count_STRIX_PU(), transactionalAnnotatedManager.count_DEFAULT_PU()); // strix-pu != strix-second-pu
+        assertEquals(transactionalAnnotatedManager.count_STRIX_SECOND_PU(), transactionalAnnotatedManager.count_DEFAULT_PU()); // strix-second-pu == strix-second-pu
 
         // (Re-)Start strix with strix-pu and default persistence properties
         Strix.startup("strix-pu");
 
-        assertEquals(0, testManager.count_STRIX_PU());
-        assertEquals(0, testManager.count_DEFAULT_PU());
-        assertEquals(0, testManager.count_STRIX_SECOND_PU());
+        assertEquals(0, transactionalAnnotatedManager.count_STRIX_PU());
+        assertEquals(0, transactionalAnnotatedManager.count_DEFAULT_PU());
+        assertEquals(0, transactionalAnnotatedManager.count_STRIX_SECOND_PU());
     }
 
     @Test(expected = PersistenceException.class)
@@ -211,52 +212,52 @@ public class StrixManagerTest {
         Strix.startup(persistenceProperties);
 
         // Should result in an PersistenceException, because the table was not created
-        testManager.count_STRIX_PU();
+        transactionalAnnotatedManager.count_STRIX_PU();
     }
 
     @Test
     public void assertMixOfDifferentPU() {
-        testManager.saveInCurrentAndSaveInDifferentPU_STRIX_PU();
-        assertEquals(3, testManager.count_STRIX_SECOND_PU());
-        assertEquals(1, testManager.count_STRIX_PU());
+        transactionalAnnotatedManager.saveInCurrentAndSaveInDifferentPU_STRIX_PU();
+        assertEquals(3, transactionalAnnotatedManager.count_STRIX_SECOND_PU());
+        assertEquals(1, transactionalAnnotatedManager.count_STRIX_PU());
     }
 
     @Test
     public void rollback() {
-        testManager.rollback_STRIX_PU();
-        assertEquals(0, testManager.count_STRIX_PU());
+        transactionalAnnotatedManager.rollback_STRIX_PU();
+        assertEquals(0, transactionalAnnotatedManager.count_STRIX_PU());
     }
 
     @Test
     public void timeout() {
-        testManager.timeout_STRIX_PU();
-        assertEquals(0, testManager.count_STRIX_PU());
+        transactionalAnnotatedManager.timeout_STRIX_PU();
+        assertEquals(0, transactionalAnnotatedManager.count_STRIX_PU());
     }
 
     @Test(expected = PersistenceException.class)
     public void jtaManaged() {
-        testManager.jtaManaged_STRIX_THIRD_PU();
+        transactionalAnnotatedManager.jtaManaged_STRIX_THIRD_PU();
     }
 
     @Test
     public void differentExceptionThanExpected() {
-        testManager.multisave_STRIX_PU();
-        assertEquals(3, testManager.count_STRIX_PU());
+        transactionalAnnotatedManager.multisave_STRIX_PU();
+        assertEquals(3, transactionalAnnotatedManager.count_STRIX_PU());
         try {
-            testManager.throwUnexceptionException_STRIX_PU();
+            transactionalAnnotatedManager.throwUnexceptionException_STRIX_PU();
         } catch (NullPointerException npe) {
         }
-        assertEquals(3, testManager.count_STRIX_PU());
+        assertEquals(3, transactionalAnnotatedManager.count_STRIX_PU());
     }
 
     @Test
     public void specialTimeoutCaseClose() {
-        testManager.specialTimeoutCaseClose_STRIX_PU();
+        transactionalAnnotatedManager.specialTimeoutCaseClose_STRIX_PU();
     }
 
     @Test
     public void specialTimeoutCaseRollback() {
-        testManager.specialTimeoutCaseRollback_STRIX_PU();
+        transactionalAnnotatedManager.specialTimeoutCaseRollback_STRIX_PU();
     }
 
     @Test
@@ -267,5 +268,21 @@ public class StrixManagerTest {
         TransactionalAspect.class.getMethod("aspectOf").invoke(null);
         TransactionalAspect.class.getMethod("hasAspect").invoke(null);
     }
+
+    @Test
+    public void methodAnnotatedWithTransactional() {
+        assertEquals(0, methodsAnnotatedWithTransactionalManager.count_STRIX_PU());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void methodAnnotatedWithTransactionalAndNoTransaction() {
+        methodsAnnotatedWithTransactionalManager.count_STRIX_PU_NoTransaction();
+    }
+
+    @Test
+    public void publicMethodNotAnnotatedWithTransactionalButInternalCallingTransactionalAnnotatedMethod() {
+        assertEquals(0, methodsAnnotatedWithTransactionalManager.callCount_STRIX_PU());
+    }
+
 
 }

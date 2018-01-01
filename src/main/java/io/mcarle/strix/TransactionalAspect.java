@@ -27,24 +27,39 @@ public class TransactionalAspect {
     }
 
     /**
-     * Matches any method, which is not annotated with {@link io.mcarle.strix.annotation.NoTransaction}
+     * Matches any execution of a method
      */
-    @Pointcut("! @annotation(io.mcarle.strix.annotation.NoTransaction)")
-    public void notNoTransactionAnnotated() {
+    @Pointcut("execution(* *(..))")
+    public void anyMethod() {
     }
 
     /**
-     * Matches any method, which is not annotated with {@link Transactional}
+     * Matches any method, which is annotated with {@link io.mcarle.strix.annotation.NoTransaction}
      */
-    @Pointcut("! @annotation(io.mcarle.strix.annotation.Transactional)")
-    public void notTransactionalAnnotated() {
+    @Pointcut("@annotation(io.mcarle.strix.annotation.NoTransaction)")
+    public void noTransactionAnnotated() {
+    }
+
+    /**
+     * Matches any method, which is annotated with {@link Transactional}
+     */
+    @Pointcut("@annotation(io.mcarle.strix.annotation.Transactional)")
+    public void transactionalAnnotated() {
+    }
+
+    /**
+     * If strix is started: Matches any method, which is not annotated with
+     * {@link io.mcarle.strix.annotation.NoTransaction}
+     */
+    @Pointcut("isPersistenceStarted() && anyMethod() && ! noTransactionAnnotated()")
+    public void startedAndMethodNotAnnotatedWithNoTransaction() {
     }
 
     /**
      * If strix is started: Matches any public method, which is not annotated with
      * {@link io.mcarle.strix.annotation.NoTransaction}
      */
-    @Pointcut("isPersistenceStarted() && publicMethod() && notNoTransactionAnnotated()")
+    @Pointcut("startedAndMethodNotAnnotatedWithNoTransaction() && publicMethod()")
     public void startedAndPublicMethodNotAnnotatedWithNoTransaction() {
     }
 
@@ -57,7 +72,7 @@ public class TransactionalAspect {
      * @return The result of the aspected method
      * @throws Throwable If the aspected method throws an exception
      */
-    @Around("startedAndPublicMethodNotAnnotatedWithNoTransaction() && @annotation(transactional)")
+    @Around("startedAndMethodNotAnnotatedWithNoTransaction() && @annotation(transactional)")
     public Object aroundMethodAnnotatedWithTransactional(
           ProceedingJoinPoint joinPoint,
           Transactional transactional
@@ -74,7 +89,7 @@ public class TransactionalAspect {
      * @return The result of the aspected method
      * @throws Throwable If the aspected method throws an exception
      */
-    @Around("startedAndPublicMethodNotAnnotatedWithNoTransaction() && @within(transactional) && notTransactionalAnnotated()")
+    @Around("startedAndPublicMethodNotAnnotatedWithNoTransaction() && @within(transactional) && ! transactionalAnnotated()")
     public Object aroundMethodNotAnnotatedWithTransactionalInClassAnnotatedWithTransactional(
           ProceedingJoinPoint joinPoint,
           Transactional transactional

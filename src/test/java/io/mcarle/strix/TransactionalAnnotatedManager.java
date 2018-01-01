@@ -15,7 +15,7 @@ import static org.junit.Assert.fail;
  * {@code strix-pu}.
  */
 @Transactional(persistenceUnit = "strix-pu")
-public class TestManager {
+public class TransactionalAnnotatedManager {
 
     /* ======================= ==== ======================= */
     /* =======================  EM  ======================= */
