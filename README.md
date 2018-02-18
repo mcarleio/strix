@@ -1,11 +1,14 @@
 ![STRIX](./logo.png)
 
+# Strix
+
 A lightweight and simple transaction library for non JEE projects.
 
 [![Maven Central][maven-image]][maven-url] 
 [![License][license-image]](LICENSE)
 [![Build status][travis-image]][travis-url]
 [![Build status][codecov-image]][codecov-url]
+[![Code Quality][codequality-image]][codequality-url]
 
 ## Simple Usage
 
@@ -108,3 +111,5 @@ limitations under the License.
 [travis-url]: https://travis-ci.org/mcarleio/strix
 [codecov-image]: https://img.shields.io/codecov/c/github/mcarleio/strix.svg
 [codecov-url]: https://codecov.io/gh/mcarleio/strix
+[codequality-image]: https://scrutinizer-ci.com/g/mcarleio/strix/badges/quality-score.png?b=master
+[codequality-url]: https://scrutinizer-ci.com/g/mcarleio/strix/?branch=master
